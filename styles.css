@@ -1,0 +1,338 @@
+/* ── Reset & variables ─────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #0f1117;
+  --surface:   #1a1d27;
+  --surface-2: #22263a;
+  --border:    #2e3347;
+  --text:      #e2e8f0;
+  --text-2:    #8892a4;
+  --radius:    6px;
+
+  --bad:   #ef4444;
+  --meh:   #92400e;
+  --good:  #3b82f6;
+  --great: #eab308;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 14px;
+}
+
+/* ── Header ────────────────────────────────────────────────── */
+.header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: .85rem 1.25rem;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+
+.site-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  color: var(--text);
+}
+
+.year-badge {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-2);
+  font-size: .8rem;
+  font-weight: 600;
+  padding: .2rem .65rem;
+  border-radius: 999px;
+}
+
+.tuto-btn {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-2);
+  font-size: .8rem;
+  font-weight: 500;
+  padding: .4rem .85rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color .15s, color .15s;
+  font-family: inherit;
+}
+.tuto-btn:hover { border-color: #5a6280; color: var(--text); }
+
+/* ── Légende ───────────────────────────────────────────────── */
+.legend {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: .6rem 1.25rem;
+}
+
+.legend-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  font-size: .78rem;
+  color: var(--text-2);
+}
+
+.legend-dot {
+  width: 12px; height: 12px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+/* ── Grille principale ─────────────────────────────────────── */
+.main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+/* ── Ligne mois ────────────────────────────────────────────── */
+.month-row {
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+}
+
+.month-label {
+  width: 36px;
+  flex-shrink: 0;
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--text-2);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  text-align: right;
+  padding-right: .4rem;
+}
+
+.days-row {
+  display: flex;
+  gap: 3px;
+  flex-wrap: nowrap;
+}
+
+/* ── Case jour ─────────────────────────────────────────────── */
+.day {
+  width: 28px;
+  height: 36px;
+  border-radius: 5px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: transform .1s, border-color .15s, background .15s;
+  flex-shrink: 0;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 3px;
+}
+
+.day-num {
+  font-size: .6rem;
+  font-weight: 600;
+  color: var(--text-2);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+.day:hover {
+  transform: scale(1.15);
+  border-color: #5a6280;
+  z-index: 2;
+}
+
+.day.today {
+  border-color: #fff;
+  border-width: 2px;
+}
+
+.day[data-mood="bad"]   { background: var(--bad);   border-color: var(--bad); }
+.day[data-mood="meh"]   { background: var(--meh);   border-color: var(--meh); }
+.day[data-mood="good"]  { background: var(--good);  border-color: var(--good); }
+.day[data-mood="great"] { background: var(--great); border-color: var(--great); }
+
+.day[data-mood] .day-num { color: rgba(255,255,255,.7); }
+
+/* ── Popup ─────────────────────────────────────────────────── */
+.popup {
+  position: fixed;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: .75rem 1rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,.5);
+  z-index: 200;
+  display: none;
+  flex-direction: column;
+  gap: .6rem;
+  min-width: 180px;
+}
+.popup.visible { display: flex; }
+
+.popup-label {
+  font-size: .78rem;
+  color: var(--text-2);
+  font-weight: 500;
+}
+
+.popup-moods {
+  display: flex;
+  gap: .5rem;
+  align-items: center;
+}
+
+.mood-btn {
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform .1s, border-color .1s;
+}
+.mood-btn:hover { transform: scale(1.2); border-color: #fff; }
+
+.mood-btn--clear {
+  background: var(--surface-2) !important;
+  color: var(--text-2);
+  font-size: .85rem;
+  border-color: var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mood-btn--clear:hover { border-color: #fff; color: var(--text); }
+
+/* ── Tutoriel overlay ──────────────────────────────────────── */
+.tuto-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.7);
+  z-index: 300;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+}
+.tuto-overlay.visible { display: flex; }
+
+.tuto-modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 2rem;
+  max-width: 460px;
+  width: 100%;
+  position: relative;
+  box-shadow: 0 16px 48px rgba(0,0,0,.6);
+}
+
+.tuto-close {
+  position: absolute;
+  top: 1rem; right: 1rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-2);
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: .85rem;
+  display: flex; align-items: center; justify-content: center;
+  font-family: inherit;
+}
+.tuto-close:hover { color: var(--text); }
+
+.tuto-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: .5rem;
+}
+
+.tuto-intro {
+  font-size: .875rem;
+  color: var(--text-2);
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+}
+
+.tuto-steps {
+  display: flex;
+  flex-direction: column;
+  gap: .85rem;
+  margin-bottom: 1.5rem;
+}
+
+.tuto-step {
+  display: flex;
+  gap: .85rem;
+  align-items: flex-start;
+}
+
+.tuto-num {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  font-size: .75rem;
+  font-weight: 700;
+  color: var(--text);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  margin-top: .1rem;
+}
+
+.tuto-step strong { font-size: .875rem; display: block; margin-bottom: .2rem; }
+.tuto-step p { font-size: .8rem; color: var(--text-2); line-height: 1.5; }
+
+.tuto-legend { border-top: 1px solid var(--border); padding-top: 1rem; }
+.tuto-legend-title { font-size: .8rem; font-weight: 600; color: var(--text-2); margin-bottom: .6rem; text-transform: uppercase; letter-spacing: .05em; }
+
+.tuto-moods { display: flex; flex-direction: column; gap: .4rem; }
+.tuto-mood { display: flex; align-items: center; gap: .6rem; font-size: .83rem; color: var(--text-2); }
+.mood-dot { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; }
+
+/* ── Responsive ────────────────────────────────────────────── */
+@media (max-width: 700px) {
+  .day { width: 13px; height: 13px; }
+  .month-label { width: 28px; font-size: .65rem; }
+  .days-row { gap: 2px; }
+  .legend-inner { gap: .85rem; }
+}
